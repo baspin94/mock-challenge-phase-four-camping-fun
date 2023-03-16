@@ -64,6 +64,20 @@ api.add_resource(CampersById, "/campers/<int:id>")
 
 
 
+class Activities(Resource):
+    def get(self):
+        activities = [activity.to_dict() for activity in Activity.query.all()]
+        response = make_response(
+            activities,
+            200
+        )
+        return response
+    
+    
+api.add_resource(Activities, "/activities")
+
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
