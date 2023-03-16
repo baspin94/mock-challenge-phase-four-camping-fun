@@ -32,5 +32,26 @@ class Campers(Resource):
 
 api.add_resource(Campers, '/campers')
 
+
+
+
+class CampersById(Resource):
+
+    def get(self, id):
+        camper = Camper.query.filter(Camper.id == id).first().to_dict()
+
+        response = make_response(
+            camper,
+            200
+        )
+        return response
+        
+
+api.add_resource(CampersById, "/campers/<int:id>")
+
+
+
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
