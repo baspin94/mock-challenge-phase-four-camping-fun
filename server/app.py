@@ -29,11 +29,23 @@ class Campers(Resource):
         )
 
         return response
+    
+    def post(self):
+        new_camper = Camper(
+            name = request.get_json()['name'],
+            age = request.get_json()['age']
+        )
+        db.session.add(new_camper)
+        db.session.commit()
+
+        response = make_response(
+            new_camper.to_dict(),
+            201
+        )
+
+        return response
 
 api.add_resource(Campers, '/campers')
-
-
-
 
 class CampersById(Resource):
 
