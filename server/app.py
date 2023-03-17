@@ -41,7 +41,7 @@ class Campers(Resource):
 
         except ValueError as e:
             abort(422, e.args[0])
-            
+
 
         db.session.add(new_camper)
         db.session.commit()
@@ -103,6 +103,9 @@ class ActivityById(Resource):
     def delete(self, id):
 
         activity = Activity.query.filter(Activity.id == id).first()
+         
+        if not activity:
+            abort(404, description="Activity not found")
 
         db.session.delete(activity)
         db.session.commit()

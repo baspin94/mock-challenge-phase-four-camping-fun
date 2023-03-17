@@ -11,7 +11,7 @@ function Camper() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`/campers/${id}`).then((r) => {
+    fetch(`http://localhost:4000/campers/${id}`).then((r) => {
       if (r.ok) {
         r.json().then((camper) =>
           setCamper({ data: camper, error: null, status: "resolved" })

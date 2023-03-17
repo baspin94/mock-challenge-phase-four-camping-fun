@@ -7,7 +7,7 @@ function NewSignup({ camperId, onAddActivity }) {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    fetch("/activities")
+    fetch("http://localhost:4000/activities")
       .then((r) => r.json())
       .then(setActivities);
   }, []);
@@ -19,7 +19,7 @@ function NewSignup({ camperId, onAddActivity }) {
       camper_id: camperId,
       time: Number(time),
     };
-    fetch("/signups", {
+    fetch("http://localhost:4000/signups", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
