@@ -73,7 +73,7 @@ class Activities(Resource):
         )
         return response
     
-    
+
 api.add_resource(Activities, "/activities")
 
 class ActivityById(Resource):
@@ -108,6 +108,52 @@ class ActivityById(Resource):
         
 
 api.add_resource(ActivityById, '/activities/<int:id>')
+
+
+
+
+class Signups(Resource):
+    
+    def get(self):
+        signups = [signup.to_dict() for signup in Signup.query.all()]
+
+        response = make_response(
+            signups,
+            200
+        )
+        return response
+
+
+    
+    def post(self):
+        data = request.get_json()
+
+        new_signup = Signup(
+            time = data["time"],
+            camper_id = data["camper_id"],
+            activity_id = data["activity_id"]
+        )
+        db.session.add(new_signup)
+        db.session.commit()
+
+        response_body = {
+            "id": new_signup.activity.id,
+            "name": new_signup.activity.name,
+            "difficulty": new_signup.activity.difficulty
+        }
+
+        response = make_response(
+            response_body,
+            201
+        )
+        return response
+    
+
+
+api.add_resource(Signups, "/signups")
+
+
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
