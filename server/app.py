@@ -76,8 +76,38 @@ class Activities(Resource):
     
 api.add_resource(Activities, "/activities")
 
+class ActivityById(Resource):
+    
+    def get(self, id):
 
+        activity = Activity.query.filter(Activity.id == id).first().to_dict()
 
+        response = make_response(
+            activity,
+            200
+        )
+
+        return response
+
+    def delete(self, id):
+
+        activity = Activity.query.filter(Activity.id == id).first()
+
+        db.session.delete(activity)
+        db.session.commit()
+
+        response_body = ""
+
+        response = make_response(
+            response_body,
+            200
+        )
+
+        return response
+
+        
+
+api.add_resource(ActivityById, '/activities/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
