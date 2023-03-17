@@ -139,11 +139,16 @@ class Signups(Resource):
     def post(self):
         data = request.get_json()
 
-        new_signup = Signup(
-            time = data["time"],
-            camper_id = data["camper_id"],
-            activity_id = data["activity_id"]
-        )
+        try:
+            new_signup = Signup(
+                time = data["time"],
+                camper_id = data["camper_id"],
+                activity_id = data["activity_id"]
+            )
+        
+        except ValueError as e:
+            abort(422, e.args[0])
+
         db.session.add(new_signup)
         db.session.commit()
 
