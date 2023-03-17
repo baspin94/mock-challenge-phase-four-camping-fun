@@ -1,7 +1,8 @@
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, abort
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from werkzeug.exceptions import NotFound
 
 
 from models import db, Camper, Activity, Signup
@@ -50,10 +51,13 @@ api.add_resource(Campers, '/campers')
 class CampersById(Resource):
 
     def get(self, id):
-        camper = Camper.query.filter(Camper.id == id).first().to_dict()
+        camper = Camper.query.filter(Camper.id == id).first()
+
+        if not camper:
+            abort(404, description="Camper not found.")
 
         response = make_response(
-            camper,
+            camper.to_dict(),
             200
         )
         return response
@@ -152,7 +156,10 @@ class Signups(Resource):
 
 api.add_resource(Signups, "/signups")
 
-
+@app.errorhandler(404)
+def handle_not_found(e):
+    response = jsonify(error=str(e)), 404
+    return response
 
 
 if __name__ == '__main__':
