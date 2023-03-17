@@ -18,12 +18,19 @@ db.init_app(app)
 
 api = Api(app)
 
+class Campers(Resource):
+    
+    def get(self):
+        campers = [camper.to_dict() for camper in Camper.query.all()]
 
+        response = make_response(
+            jsonify(campers),
+            200
+        )
 
+        return response
 
-
-
-
+api.add_resource(Campers, '/campers')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
