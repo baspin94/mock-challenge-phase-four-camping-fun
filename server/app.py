@@ -32,10 +32,17 @@ class Campers(Resource):
         return response
     
     def post(self):
-        new_camper = Camper(
-            name = request.get_json()['name'],
-            age = request.get_json()['age']
-        )
+
+        try:
+            new_camper = Camper(
+                name = request.get_json()['name'],
+                age = request.get_json()['age']
+            )
+
+        except ValueError as e:
+            abort(422, e.args[0])
+            
+
         db.session.add(new_camper)
         db.session.commit()
 
